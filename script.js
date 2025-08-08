@@ -305,6 +305,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Handle contact form submit without page jump
+    const contactForm = document.querySelector('.contact-form form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const isValid = validateForm(contactForm);
+            if (!isValid) return;
+            // Show a lightweight success message and clear fields
+            const btn = contactForm.querySelector('button[type="submit"]');
+            const original = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Terima kasih! Mesej dihantar';
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = original;
+                contactForm.reset();
+            }, 2000);
+        });
+    }
+
     // Add lazy loading for images (if images are added later)
     function addLazyLoading() {
         const images = document.querySelectorAll('img[data-src]');

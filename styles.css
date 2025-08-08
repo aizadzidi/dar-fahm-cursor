@@ -270,9 +270,25 @@ header .container {
 }
 
 .brand-logo {
-    height: 44px;
+    height: 160px; /* 2x from original 80px */
     width: auto;
     display: inline-block;
+    transition: var(--transition);
+}
+
+/* Make logo slightly smaller when header is scrolled */
+header.scrolled .brand-logo {
+    height: 120px;
+}
+
+/* Responsive adjustments for the logo */
+@media (max-width: 768px) {
+    .brand-logo {
+        height: 120px;
+    }
+    header.scrolled .brand-logo {
+        height: 100px;
+    }
 }
 
 .logo {
@@ -1503,6 +1519,9 @@ header .container {
     margin-bottom: 20px;
     justify-items: center; /* center cards in their grid cells */
     justify-content: center; /* center grid when there are fewer items */
+    max-width: 980px; /* keep rows tight and centered when few items */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .program-card {
