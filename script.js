@@ -401,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addImageErrorHandling();
     addLazyLoading();
     addSearchFunctionality();
+    initGalleryCarousel();
     
     // Add accessibility improvements
     function improveAccessibility() {
@@ -451,6 +452,70 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Darul Fahmi website loaded successfully!');
 });
+
+// Simple Gallery Carousel logic
+function initGalleryCarousel() {
+    const carousel = document.querySelector('.gallery-carousel');
+    const track = document.querySelector('.gallery-track');
+    const slides = document.querySelectorAll('.gallery-slide');
+    const prevBtn = document.querySelector('.gallery-prev');
+    const nextBtn = document.querySelector('.gallery-next');
+    const dots = document.querySelectorAll('.gallery-dot');
+    if (!carousel || !track || slides.length === 0) return;
+
+    let currentIndex = 0;
+    const getSlideWidth = () => carousel.clientWidth;
+    function sizeSlides() {
+        const width = getSlideWidth();
+        slides.forEach(slide => {
+            slide.style.width = width + 'px';
+            slide.style.flex = '0 0 ' + width + 'px';
+        });
+        track.style.width = (width * slides.length) + 'px';
+    }
+
+    function updateCarousel(index) {
+        currentIndex = (index + slides.length) % slides.length;
+        const offsetPx = -currentIndex * getSlideWidth();
+        track.style.transform = `translateX(${offsetPx}px)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+    }
+
+    prevBtn && prevBtn.addEventListener('click', () => updateCarousel(currentIndex - 1));
+    nextBtn && nextBtn.addEventListener('click', () => updateCarousel(currentIndex + 1));
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            const idx = parseInt(dot.getAttribute('data-index')) || 0;
+            updateCarousel(idx);
+        });
+    });
+
+    // Swipe support (basic)
+    let startX = 0;
+    let isDown = false;
+    track.addEventListener('touchstart', e => { isDown = true; startX = e.touches[0].clientX; });
+    track.addEventListener('touchmove', e => {
+        if (!isDown) return;
+        const diff = e.touches[0].clientX - startX;
+        if (Math.abs(diff) > 50) {
+            isDown = false;
+            if (diff > 0) updateCarousel(currentIndex - 1); else updateCarousel(currentIndex + 1);
+        }
+    });
+    track.addEventListener('touchend', () => { isDown = false; });
+
+    // Auto-play (optional, gentle)
+    let auto = setInterval(() => updateCarousel(currentIndex + 1), 6000);
+    carousel && carousel.addEventListener('mouseenter', () => clearInterval(auto));
+    carousel && carousel.addEventListener('mouseleave', () => { auto = setInterval(() => updateCarousel(currentIndex + 1), 6000); });
+
+    // Keep slides aligned on resize
+    window.addEventListener('resize', () => { sizeSlides(); updateCarousel(currentIndex); });
+    sizeSlides();
+    updateCarousel(0);
+}
 
 // Add CSS for ripple effect
 const style = document.createElement('style');

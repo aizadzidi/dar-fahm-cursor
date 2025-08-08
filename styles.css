@@ -263,6 +263,9 @@ header .container {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    /* Give more breathing room on wide screens so logo sits further left and nav further right */
+    max-width: 1400px;
+    width: 94%;
 }
 
 .brand {
@@ -275,7 +278,7 @@ header .container {
 }
 
 .brand-logo {
-    height: 65px;
+    height: 80px;
     width: auto;
     display: inline-block;
     transition: var(--transition);
@@ -284,16 +287,16 @@ header .container {
 
 /* Make logo slightly smaller when header is scrolled */
 header.scrolled .brand-logo {
-    height: 55px;
+    height: 68px;
 }
 
 /* Responsive adjustments for the logo */
 @media (max-width: 768px) {
     .brand-logo {
-        height: 50px;
+        height: 64px;
     }
     header.scrolled .brand-logo {
-        height: 45px;
+        height: 56px;
     }
 }
 
@@ -411,7 +414,11 @@ header.scrolled .brand-logo {
 /* Hero Section */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('assets/hero-bg.svg') no-repeat center center/cover;
+    /* Deep dark blue layered background */
+    background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(14, 165, 233, 0.15), transparent 60%),
+        radial-gradient(800px 400px at 10% 110%, rgba(37, 99, 235, 0.18), transparent 60%),
+        linear-gradient(135deg, #0b1e2d 0%, #061726 50%, #020b13 100%);
     display: flex;
     align-items: center;
     text-align: center;
@@ -429,8 +436,31 @@ header.scrolled .brand-logo {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(26, 82, 118, 0.3) 0%, transparent 70%);
+    /* Soft vignette and subtle grid to add depth */
+    background:
+        radial-gradient(circle at 50% 40%, rgba(26, 82, 118, 0.25) 0%, transparent 55%),
+        url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M0,20 L40,20 M20,0 L20,40" stroke="%23ffffff" stroke-width="0.5" opacity="0.04"/></svg>');
     z-index: 1;
+}
+
+/* Floating 3D-like glow element */
+.hero::after {
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: 10%;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.55), rgba(14, 165, 233, 0.35) 40%, transparent 60%);
+    filter: blur(12px) saturate(120%);
+    transform: translateY(0);
+    animation: heroFloat 10s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+    50% { transform: translateY(18px) translateX(-6px) scale(1.02); }
 }
 
 .hero .container {
@@ -1229,7 +1259,9 @@ header.scrolled .brand-logo {
     flex: 0 0 100%;
     position: relative;
     overflow: hidden;
-    height: 400px;
+    /* Maintain a consistent cinematic frame without forcing crop */
+    aspect-ratio: 16 / 9;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1238,9 +1270,17 @@ header.scrolled .brand-logo {
 .gallery-image {
     width: 100%;
     height: 100%;
+    /* Fill the frame nicely while minimizing apparent zoom */
     object-fit: cover;
+    object-position: center center;
     transition: transform 0.6s ease;
     background: #e9ecef; /* fallback fill */
+}
+
+/* For certain slides where we want the entire image visible without crop */
+.gallery-image.contain {
+    object-fit: contain;
+    background: #111; /* subtle letterbox for non-16:9 images */
 }
 
 .gallery-slide:hover .gallery-image {
@@ -1453,7 +1493,7 @@ header.scrolled .brand-logo {
     background-size: 40%;
 }
 
-.teacher-image.fallback { /* if image fails, keep placeholder visible */ }
+/* fallback helper no longer needed; removing empty ruleset to satisfy linter */
 
 .teacher-image i {
     font-size: 4rem;
@@ -1881,6 +1921,7 @@ header.scrolled .brand-logo {
     color: var(--primary-color);
     margin-bottom: 10px;
     background: var(--gradient-primary);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -2089,6 +2130,48 @@ footer {
     padding: 80px 0 20px;
     position: relative;
     overflow: hidden;
+}
+
+/* Sticky CTA */
+.sticky-cta {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    /* Bolder, more obvious CTA */
+    background: linear-gradient(135deg, #ff3366, #ff6b00);
+    color: #ffffff;
+    border-radius: 999px;
+    box-shadow: 0 12px 30px rgba(212, 172, 13, 0.24);
+    z-index: 1100;
+    font-weight: 700;
+    transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+    opacity: 0.95;
+}
+
+.sticky-cta i {
+    color: #ffffff;
+}
+
+.sticky-cta:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 38px rgba(212, 172, 13, 0.32);
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    /* Keep CTA label visible but compact on mobile */
+    .sticky-cta span { display: inline; font-size: 12px; }
+    .sticky-cta { padding: 10px 14px; border-radius: 14px; gap: 8px; }
+}
+
+/* Desktop nav refinements for cleaner look and more spacing from logo */
+@media (min-width: 992px) {
+    .nav-links { gap: 12px; }
+    .nav-links a { padding: 8px 12px; font-size: 0.92rem; }
 }
 
 footer::before {
@@ -2304,7 +2387,8 @@ footer .container {
     }
     
     .gallery-slide {
-        height: 300px;
+        aspect-ratio: 16 / 9;
+        height: auto;
     }
     
     .gallery-btn {
@@ -2580,7 +2664,8 @@ footer .container {
     }
     
     .gallery-slide {
-        height: 250px;
+        aspect-ratio: 16 / 9;
+        height: auto;
     }
     
     .gallery-btn {
