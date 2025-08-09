@@ -2118,9 +2118,18 @@ header.scrolled .brand-logo {
         font-size: 1.6rem;
     }
     /* Show the covers above the title/content on mobile for better visual flow */
-    .featured-grid { grid-template-columns: 1fr; }
-    .featured-right { grid-row: 1; }
-    .featured-left { grid-row: 2; }
+    .featured-grid { 
+        grid-template-columns: 1fr; 
+        /* Force image block above content block consistently */
+        grid-template-areas: 
+            "right"
+            "left";
+    }
+    .featured-right { 
+        grid-area: right; 
+        align-self: start; /* keep covers pinned to top of the grid */
+    }
+    .featured-left { grid-area: left; }
     /* Make the composite image smaller on mobile */
     .featured-right .covers-composite {
         transform: scale(0.8);
@@ -2137,12 +2146,19 @@ header.scrolled .brand-logo {
         margin-left: auto;
         margin-right: auto;
         box-sizing: border-box;
-        padding-left: max(20px, env(safe-area-inset-left));
-        padding-right: max(20px, env(safe-area-inset-right));
+        /* Ensure clear breathing room inside card on mobile */
+        padding-left: 24px;
+        padding-right: 24px;
     }
     /* Keep featured grid content centered for narrow screens */
     .featured-grid { place-items: center; }
-    .featured-left { align-items: center; text-align: center; }
+    .featured-left { 
+        align-items: center; 
+        text-align: center; 
+        /* Add a touch more inner padding so text/buttons never touch card edge */
+        padding-left: 8px; 
+        padding-right: 8px; 
+    }
     .featured-right { justify-content: center; }
     /* Move ribbon fully inside the card so it doesn't bias alignment */
     .program-card.featured::before {
