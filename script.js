@@ -373,23 +373,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle contact form submit without page jump
+    // Handle contact form submit: send via email service
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const isValid = validateForm(contactForm);
             if (!isValid) return;
-            // Show a lightweight success message and clear fields
-            const btn = contactForm.querySelector('button[type="submit"]');
-            const original = btn.textContent;
-            btn.disabled = true;
-            btn.textContent = 'Terima kasih! Mesej dihantar';
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.textContent = original;
+
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Menghantar...';
+
+            try {
+                const formData = new FormData(contactForm);
+                // Extra metadata for email service
+                formData.append('_subject', 'Pertanyaan baharu daripada laman web Darul Fahmi');
+                formData.append('_template', 'table');
+                formData.append('_captcha', 'false');
+
+                // Send using FormSubmit AJAX endpoint
+                const response = await fetch('https://formsubmit.co/ajax/darulfahmiofficial@gmail.com', {
+                    method: 'POST',
+                    headers: { Accept: 'application/json' },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Ralat rangkaian');
+                const result = await response.json();
+                if (result.success !== 'true') throw new Error('Penghantaran gagal');
+
+                submitButton.textContent = 'Terima kasih! Mesej dihantar';
                 contactForm.reset();
-            }, 2000);
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                }, 2500);
+            } catch (err) {
+                submitButton.textContent = 'Ralat. Sila cuba lagi';
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                }, 2500);
+            }
         });
     }
 
