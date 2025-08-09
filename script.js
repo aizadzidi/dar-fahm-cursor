@@ -403,6 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addSearchFunctionality();
     initGalleryCarousel();
     initFAQAccordion();
+    initTestimonialsCarousel();
     
     // Add accessibility improvements
     function improveAccessibility() {
@@ -706,3 +707,135 @@ function initFAQAccordion() {
         });
     });
 }
+
+// Testimonials (Kalam Asatizah) Carousel
+function initTestimonialsCarousel() {
+    const carousel = document.querySelector('.testimonials-carousel');
+    const track = document.querySelector('.testimonials-track');
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const prev = document.querySelector('.testimonial-prev');
+    const next = document.querySelector('.testimonial-next');
+    const dots = document.querySelectorAll('.testimonial-dot');
+    if (!carousel || !track || slides.length === 0) return;
+
+    let current = 0;
+    let autoTimer = null;
+
+    const getWidth = () => carousel.clientWidth;
+
+    function size() {
+        const w = getWidth();
+        slides.forEach(s => {
+            s.style.width = w + 'px';
+            s.style.flex = '0 0 ' + w + 'px';
+        });
+        track.style.width = (w * slides.length) + 'px';
+    }
+
+    function goTo(index) {
+        current = (index + slides.length) % slides.length;
+        track.style.transform = `translateX(${-current * getWidth()}px)`;
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[current]) dots[current].classList.add('active');
+        slides.forEach((slide, i) => slide.setAttribute('aria-label', `${i + 1} of ${slides.length}`));
+    }
+
+    function startAuto() {
+        stopAuto();
+        autoTimer = setInterval(() => goTo(current + 1), 6000);
+    }
+
+    function stopAuto() {
+        if (autoTimer) clearInterval(autoTimer);
+        autoTimer = null;
+    }
+
+    prev && prev.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+    next && next.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+
+    dots.forEach(dot => dot.addEventListener('click', () => {
+        const i = parseInt(dot.getAttribute('data-index')) || 0;
+        goTo(i);
+        startAuto();
+    }));
+
+    // Touch swipe
+    let startX = 0;
+    let isDown = false;
+    track.addEventListener('touchstart', e => { isDown = true; startX = e.touches[0].clientX; stopAuto(); });
+    track.addEventListener('touchmove', e => {
+        if (!isDown) return;
+        const diff = e.touches[0].clientX - startX;
+        if (Math.abs(diff) > 50) {
+            isDown = false;
+            if (diff > 0) goTo(current - 1); else goTo(current + 1);
+            startAuto();
+        }
+    });
+    track.addEventListener('touchend', () => { isDown = false; startAuto(); });
+
+    // Pause on hover
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+
+    window.addEventListener('resize', () => { size(); goTo(current); });
+    size();
+    goTo(0);
+    startAuto();
+}
+
+// Smart sticky CTA visibility based on sections with existing CTAs
+function initStickyCTAVisibility() {
+    const stickyCTA = document.querySelector('.sticky-cta');
+    if (!stickyCTA) return;
+
+    function checkStickyCTAVisibility() {
+        const viewportHeight = window.innerHeight;
+        const scrollTop = window.pageYOffset;
+        const viewportTop = scrollTop;
+        const viewportBottom = scrollTop + viewportHeight;
+        
+        let shouldHide = false;
+
+        // Check for any visible CTA buttons in the viewport (excluding the sticky CTA)
+        const ctaButtons = document.querySelectorAll('.btn[href*="forms.gle"], .registration-btn[href*="forms.gle"]');
+        for (const button of ctaButtons) {
+            if (button === stickyCTA) continue;
+            const rect = button.getBoundingClientRect();
+            const buttonTop = rect.top + scrollTop;
+            const buttonBottom = buttonTop + rect.height;
+            if (viewportBottom > buttonTop && viewportTop < buttonBottom) {
+                shouldHide = true;
+                break;
+            }
+        }
+
+        // Toggle visibility with smooth transition
+        if (shouldHide) {
+            stickyCTA.classList.add('hidden');
+        } else {
+            stickyCTA.classList.remove('hidden');
+        }
+    }
+
+    // Check on scroll with throttling for performance
+    let ticking = false;
+    function onScroll() {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                checkStickyCTAVisibility();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', checkStickyCTAVisibility);
+    
+    // Initial check
+    checkStickyCTAVisibility();
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initStickyCTAVisibility);

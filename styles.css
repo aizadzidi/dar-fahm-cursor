@@ -1,3 +1,39 @@
+.volume-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin: 16px 0 6px;
+}
+
+.volume-item {
+    text-align: center;
+}
+
+.volume-thumb {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 8px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid rgba(26, 82, 118, 0.12);
+    box-shadow: 0 6px 16px rgba(26, 82, 118, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.volume-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.volume-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
 /* Global Styles */
 :root {
     --primary-color: #1a5276; /* Deep blue */
@@ -982,7 +1018,7 @@ header.scrolled .brand-logo {
     will-change: transform, opacity;
     backface-visibility: hidden;
     position: relative;
-    display: none;
+    display: block;
 }
 
 .testimonial-card::before {
@@ -1023,6 +1059,107 @@ header.scrolled .brand-logo {
 .testimonial-author p {
     font-size: 0.9rem;
     opacity: 0.8;
+}
+
+/* Testimonials modern slider */
+.testimonials-carousel {
+    position: relative;
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 30px auto 0;
+    border-radius: var(--border-radius-lg);
+}
+
+.testimonials-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+.testimonial-slide {
+    flex: 0 0 100%;
+    padding: 4px; /* subtle gutter */
+}
+
+.testimonial-nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+    pointer-events: none;
+}
+
+.testimonial-btn {
+    pointer-events: all;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+.testimonial-btn:hover {
+    background: var(--secondary-color);
+    color: #111;
+    transform: scale(1.06);
+    box-shadow: 0 10px 24px rgba(212,172,13,0.25);
+}
+
+.testimonial-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.testimonial-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.testimonial-dot.active {
+    background: var(--secondary-color);
+    transform: scale(1.15);
+}
+
+.testimonial-dot.active::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: rgba(212,172,13,0.18);
+}
+
+.testimonial-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--secondary-color);
+    margin-right: 12px;
+}
+
+.testimonial-author-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
 }
 
 .slider-controls {
@@ -1573,16 +1710,13 @@ header.scrolled .brand-logo {
 }
 
 .teacher-image {
-    height: 240px; /* more breathing space to reduce tight cropping */
-    background-color: var(--primary-color);
+    height: 260px;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='24' r='14' fill='%23ffffff'/><path d='M8 58c0-12.15 10.85-22 24-22s24 9.85 24 22' fill='%23ffffff'/></svg>");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 40%;
+    overflow: visible;
+    border-radius: 50%;
 }
 
 /* fallback helper no longer needed; removing empty ruleset to satisfy linter */
@@ -1593,12 +1727,13 @@ header.scrolled .brand-logo {
 }
 
 .teacher-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 30%; /* show a bit more headroom */
-    transform: scale(0.9); /* zoom out slightly so faces fit better */
-    transition: transform 0.3s ease;
+    width: 240px;
+    height: 240px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 50%;
+    border: 5px solid var(--secondary-color);
+    background: #fff;
 }
 
 .teacher-info {
@@ -1779,6 +1914,11 @@ header.scrolled .brand-logo {
     margin-right: auto;
 }
 
+/* Remove duplicate icon above title for the featured card to avoid repetition with right-side images */
+.program-card.featured .program-icon {
+    display: none;
+}
+
 .program-card.featured::before {
     content: 'Featured';
     position: absolute;
@@ -1794,30 +1934,35 @@ header.scrolled .brand-logo {
 }
 
 .program-icon {
-    font-size: 2.5rem;
-    color: var(--secondary-color);
     margin-bottom: 20px;
-    width: 70px;
-    height: 70px;
-    background: var(--gradient-primary);
-    border-radius: 20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 25px;
     box-shadow: 0 10px 20px rgba(26, 82, 118, 0.15);
     transition: var(--transition);
-    transform: rotate(0deg);
+    background: #f1f5f9;
+    overflow: hidden;
+    border: 1px solid rgba(26, 82, 118, 0.12);
+}
+
+.program-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .program-card:hover .program-icon {
-    transform: rotate(10deg) scale(1.05);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 0 15px 30px rgba(26, 82, 118, 0.2);
 }
 
 .program-card.featured .program-icon {
-    color: var(--secondary-color);
-    background: var(--gradient-secondary);
+    background: #fff7e6;
 }
 
 .program-card h3 {
@@ -1846,6 +1991,12 @@ header.scrolled .brand-logo {
 
 .program-card.featured h3::after {
     background: var(--light-text);
+}
+
+/* Slightly larger title now that the top icon is removed */
+.program-card.featured h3 {
+    font-size: 2rem;
+    margin-top: 4px;
 }
 
 .program-card p {
@@ -1894,6 +2045,76 @@ header.scrolled .brand-logo {
     margin-top: 24px; /* consistent space above buttons */
     align-self: center; /* ensure buttons align across cards */
     min-width: 120px;
+}
+
+/* Featured Durus layout: 2-column with composite covers */
+.featured-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
+    gap: 28px;
+    align-items: center;
+}
+
+.featured-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.featured-right {
+    display: flex;
+    justify-content: center;
+}
+
+.covers-composite {
+    position: relative;
+    width: 320px;
+    height: 280px;
+}
+
+.covers-composite .cover {
+    position: absolute;
+    width: 140px;
+    height: 190px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+    background: white;
+}
+
+.covers-composite .cover-1 { left: 0; top: 52px; transform: rotate(-6deg); }
+.covers-composite .cover-2 { left: 90px; top: 22px; z-index: 2; }
+.covers-composite .cover-3a { left: 180px; top: 52px; transform: rotate(6deg); }
+.covers-composite .cover-3b { left: 120px; top: 140px; width: 120px; height: 160px; z-index: 3; transform: rotate(2deg); }
+
+@media (max-width: 992px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+    .featured-right .covers-composite { margin: 0 auto; }
+}
+
+/* Mobile adjustments so the new title size scales well */
+@media (max-width: 768px) {
+    .program-card.featured h3 {
+        font-size: 1.6rem;
+    }
+    /* Show the covers above the title/content on mobile for better visual flow */
+    .featured-grid { grid-template-columns: 1fr; }
+    .featured-right { grid-row: 1; }
+    .featured-left { grid-row: 2; }
+    /* Make the composite image smaller on mobile */
+    .featured-right .covers-composite {
+        transform: scale(0.8);
+        transform-origin: center;
+    }
+    /* Center CTAs within the featured card on mobile */
+    .program-card.featured .cta-buttons { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    /* Further reduce visual size on very small screens */
+    .featured-right .covers-composite { transform: scale(0.72); }
 }
 
 /* CTA Section */
@@ -2257,6 +2478,14 @@ footer {
     transform: translateY(-4px);
     box-shadow: 0 16px 38px rgba(212, 172, 13, 0.32);
     opacity: 1;
+}
+
+/* Utility to hide sticky CTA via JS */
+.sticky-cta.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: transform .25s ease, opacity .2s ease;
 }
 
 @media (max-width: 480px) {
