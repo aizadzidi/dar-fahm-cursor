@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addImageErrorHandling();
     addLazyLoading();
     addSearchFunctionality();
-    initGalleryCarousel();
+    initModernSlider();
     initFAQAccordion();
     initTestimonialsCarousel();
     
@@ -496,68 +496,209 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Darul Fahmi website loaded successfully!');
 });
 
-// Simple Gallery Carousel logic
-function initGalleryCarousel() {
-    const carousel = document.querySelector('.gallery-carousel');
-    const track = document.querySelector('.gallery-track');
-    const slides = document.querySelectorAll('.gallery-slide');
-    const prevBtn = document.querySelector('.gallery-prev');
-    const nextBtn = document.querySelector('.gallery-next');
-    const dots = document.querySelectorAll('.gallery-dot');
-    if (!carousel || !track || slides.length === 0) return;
+// Modern Slider with Advanced Features
+function initModernSlider() {
+    const slider = document.querySelector('.modern-slider');
+    if (!slider) return;
 
-    let currentIndex = 0;
-    const getSlideWidth = () => carousel.clientWidth;
-    function sizeSlides() {
-        const width = getSlideWidth();
-        slides.forEach(slide => {
-            slide.style.width = width + 'px';
-            slide.style.flex = '0 0 ' + width + 'px';
-        });
-        track.style.width = (width * slides.length) + 'px';
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.slider-nav.prev');
+    const nextBtn = document.querySelector('.slider-nav.next');
+    const indicators = document.querySelectorAll('.indicator');
+    const progressBar = document.querySelector('.progress-bar');
+    
+    if (!slides.length) return;
+
+    let currentSlide = 0;
+    let isAnimating = false;
+    let autoPlayInterval = null;
+    const autoPlayDelay = 5000; // 5 seconds
+
+    // Update slide and indicators
+    function updateSlider(newSlide) {
+        if (isAnimating || newSlide === currentSlide) return;
+        
+        isAnimating = true;
+        
+        // Move slides wrapper
+        const slidesWrapper = document.querySelector('.slides-wrapper');
+        if (slidesWrapper) {
+            slidesWrapper.style.transform = `translateX(-${newSlide * 100}%)`;
+        }
+        
+        // Update slides
+        slides[currentSlide]?.classList.remove('active');
+        slides[newSlide]?.classList.add('active');
+        
+        // Update indicators
+        indicators[currentSlide]?.classList.remove('active');
+        indicators[newSlide]?.classList.add('active');
+        
+        // Update progress bar
+        if (progressBar) {
+            progressBar.style.width = `${((newSlide + 1) / slides.length) * 100}%`;
+        }
+        
+        currentSlide = newSlide;
+        
+        // Reset animation lock after transition
+        setTimeout(() => {
+            isAnimating = false;
+        }, 800);
     }
 
-    function updateCarousel(index) {
-        currentIndex = (index + slides.length) % slides.length;
-        const offsetPx = -currentIndex * getSlideWidth();
-        track.style.transform = `translateX(${offsetPx}px)`;
-        dots.forEach(dot => dot.classList.remove('active'));
-        if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+    // Next slide
+    function nextSlide() {
+        const next = (currentSlide + 1) % slides.length;
+        updateSlider(next);
     }
 
-    prevBtn && prevBtn.addEventListener('click', () => updateCarousel(currentIndex - 1));
-    nextBtn && nextBtn.addEventListener('click', () => updateCarousel(currentIndex + 1));
+    // Previous slide
+    function prevSlide() {
+        const prev = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlider(prev);
+    }
 
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            const idx = parseInt(dot.getAttribute('data-index')) || 0;
-            updateCarousel(idx);
+    // Go to specific slide
+    function goToSlide(index) {
+        updateSlider(index);
+    }
+
+    // Auto-play functionality
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+    }
+
+    // Event listeners
+    prevBtn?.addEventListener('click', () => {
+        prevSlide();
+        stopAutoPlay();
+        setTimeout(startAutoPlay, 10000); // Restart after 10s
+    });
+
+    nextBtn?.addEventListener('click', () => {
+        nextSlide();
+        stopAutoPlay();
+        setTimeout(startAutoPlay, 10000); // Restart after 10s
+    });
+
+    // Indicator clicks
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            goToSlide(index);
+            stopAutoPlay();
+            setTimeout(startAutoPlay, 10000); // Restart after 10s
         });
     });
 
-    // Swipe support (basic)
+    // Touch/Swipe support
     let startX = 0;
-    let isDown = false;
-    track.addEventListener('touchstart', e => { isDown = true; startX = e.touches[0].clientX; });
-    track.addEventListener('touchmove', e => {
-        if (!isDown) return;
-        const diff = e.touches[0].clientX - startX;
-        if (Math.abs(diff) > 50) {
-            isDown = false;
-            if (diff > 0) updateCarousel(currentIndex - 1); else updateCarousel(currentIndex + 1);
+    let startY = 0;
+    let isDragging = false;
+    const minSwipeDistance = 50;
+
+    slider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isDragging = true;
+        stopAutoPlay();
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = startX - currentX;
+        const diffY = startY - currentY;
+        
+        // Prevent vertical scrolling if horizontal swipe is detected
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    slider.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+        
+        if (Math.abs(diffX) > minSwipeDistance) {
+            if (diffX > 0) {
+                nextSlide(); // Swipe left - next slide
+            } else {
+                prevSlide(); // Swipe right - previous slide
+            }
+        }
+        
+        isDragging = false;
+        setTimeout(startAutoPlay, 3000); // Restart auto-play after 3s
+    }, { passive: true });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!slider.matches(':hover')) return;
+        
+        switch(e.key) {
+            case 'ArrowLeft':
+                e.preventDefault();
+                prevSlide();
+                stopAutoPlay();
+                setTimeout(startAutoPlay, 10000);
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                nextSlide();
+                stopAutoPlay();
+                setTimeout(startAutoPlay, 10000);
+                break;
         }
     });
-    track.addEventListener('touchend', () => { isDown = false; });
 
-    // Auto-play (optional, gentle)
-    let auto = setInterval(() => updateCarousel(currentIndex + 1), 6000);
-    carousel && carousel.addEventListener('mouseenter', () => clearInterval(auto));
-    carousel && carousel.addEventListener('mouseleave', () => { auto = setInterval(() => updateCarousel(currentIndex + 1), 6000); });
+    // Pause auto-play on hover
+    slider.addEventListener('mouseenter', stopAutoPlay);
+    slider.addEventListener('mouseleave', startAutoPlay);
 
-    // Keep slides aligned on resize
-    window.addEventListener('resize', () => { sizeSlides(); updateCarousel(currentIndex); });
-    sizeSlides();
-    updateCarousel(0);
+    // Pause auto-play when tab is not visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoPlay();
+        } else {
+            startAutoPlay();
+        }
+    });
+
+    // Initialize slider position and progress bar
+    const slidesWrapper = document.querySelector('.slides-wrapper');
+    if (slidesWrapper) {
+        slidesWrapper.style.transform = `translateX(0%)`;
+    }
+    
+    if (progressBar) {
+        progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+    }
+    
+    // Initialize first slide as active
+    if (slides.length > 0) {
+        slides[0].classList.add('active');
+        if (indicators[0]) {
+            indicators[0].classList.add('active');
+        }
+    }
+    
+    // Start auto-play after a short delay
+    setTimeout(startAutoPlay, 2000);
+    
+    console.log(`Modern slider initialized with ${slides.length} slides`);
 }
 
 // Add CSS for ripple effect

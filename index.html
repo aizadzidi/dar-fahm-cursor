@@ -203,45 +203,52 @@
                 <p>Rakaman momen aktiviti dan program</p>
             </div>
 
-            <div class="gallery-carousel">
-                <div class="gallery-track">
-                    <div class="gallery-slide">
-                        <img src="images/galeri-1.png" alt="Galeri 1" class="gallery-image" loading="lazy" onerror="this.style.display='none';">
-                        <div class="gallery-overlay"><h4>Galeri 1</h4></div>
+            <div class="modern-slider">
+                <div class="slider-container">
+                    <div class="slides-wrapper">
+                        <div class="slide active" data-slide="0">
+                            <div class="slide-image">
+                                <img src="images/galeri-1.png" alt="Aktiviti dan Program Darul Fahmi" loading="lazy">
+                            </div>
+                            <div class="slide-content">
+                                <h3>Aktiviti Pembelajaran</h3>
+                                <p>Suasana pembelajaran yang interaktif dan menyeronokkan</p>
+                            </div>
+                        </div>
+                        <div class="slide" data-slide="1">
+                            <div class="slide-image">
+                                <img src="images/galeri-2.png" alt="Sesi Kelas Bahasa Arab" loading="lazy">
+                            </div>
+                            <div class="slide-content">
+                                <h3>Sesi Kelas</h3>
+                                <p>Pengajaran secara langsung dan berkesan</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="gallery-slide">
-                        <img src="images/galeri-2.png" alt="Galeri 2" class="gallery-image" loading="lazy" onerror="this.style.display='none';">
-                        <div class="gallery-overlay"><h4>Galeri 2</h4></div>
-                    </div>
-                    <div class="gallery-slide">
-                        <img src="images/galeri-3.png" alt="Galeri 3" class="gallery-image contain" loading="lazy" onerror="this.style.display='none';">
-                        <div class="gallery-overlay"><h4>Galeri 3</h4></div>
-                    </div>
-                    <div class="gallery-slide">
-                        <img src="images/galeri-4.png" alt="Galeri 4" class="gallery-image contain" loading="lazy" onerror="this.style.display='none';">
-                        <div class="gallery-overlay"><h4>Galeri 4</h4></div>
-                    </div>
-                    <div class="gallery-slide">
-                        <img src="images/galeri-5.jpeg" alt="Galeri 5" class="gallery-image contain" loading="lazy" onerror="this.style.display='none';">
-                        <div class="gallery-overlay"><h4>Galeri 5</h4></div>
-                    </div>
-                    <div class="gallery-slide">
-                        <img src="images/galeri-6.jpeg" alt="Galeri 6" class="gallery-image contain" loading="lazy" onerror="this.style.display='none';">
-                        <div class="gallery-overlay"><h4>Galeri 6</h4></div>
-                    </div>
+                    
+                    <!-- Modern Navigation -->
+                    <button class="slider-nav prev" aria-label="Slide sebelumnya">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="slider-nav next" aria-label="Slide seterusnya">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
                 </div>
-                <div class="gallery-nav">
-                    <button class="gallery-btn gallery-prev" aria-label="Slaid Sebelumnya"><i class="fas fa-chevron-left"></i></button>
-                    <button class="gallery-btn gallery-next" aria-label="Slaid Seterusnya"><i class="fas fa-chevron-right"></i></button>
+                
+                <!-- Modern Indicators -->
+                <div class="slider-indicators">
+                    <button class="indicator active" data-slide="0" aria-label="Slide 1"></button>
+                    <button class="indicator" data-slide="1" aria-label="Slide 2"></button>
                 </div>
-            </div>
-            <div class="gallery-indicators" aria-label="Penunjuk Galeri">
-                <span class="gallery-dot active" data-index="0"></span>
-                <span class="gallery-dot" data-index="1"></span>
-                <span class="gallery-dot" data-index="2"></span>
-                <span class="gallery-dot" data-index="3"></span>
-                <span class="gallery-dot" data-index="4"></span>
-                <span class="gallery-dot" data-index="5"></span>
+                
+                <!-- Progress Bar -->
+                <div class="slider-progress">
+                    <div class="progress-bar"></div>
+                </div>
             </div>
         </div>
     </section>

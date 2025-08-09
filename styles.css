@@ -1514,6 +1514,195 @@ header.scrolled .brand-logo {
     padding: var(--section-padding);
 }
 
+/* Modern Slider Styles */
+.modern-slider {
+    position: relative;
+    max-width: 1200px;
+    margin: 40px auto 0;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-large);
+}
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.slides-wrapper {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+    width: auto; /* Let it size naturally based on slides */
+}
+
+.slide {
+    flex: 0 0 100%; /* Each slide takes 100% of the CONTAINER width */
+    width: 100%; /* Explicit width of container */
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: transform 0.6s ease;
+    background: #e9ecef;
+}
+
+.slide:hover .slide-image img {
+    transform: scale(1.05);
+}
+
+.slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: var(--light-text);
+    padding: 40px 30px 20px;
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+}
+
+.slide:hover .slide-content {
+    transform: translateY(0);
+}
+
+.slide-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.slide-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Navigation Arrows */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.slider-nav:hover {
+    background: var(--secondary-color);
+    color: var(--light-text);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(212, 172, 13, 0.3);
+}
+
+.slider-nav svg {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.slider-nav:hover svg {
+    color: var(--light-text);
+}
+
+.slider-nav.prev {
+    left: 20px;
+}
+
+.slider-nav.next {
+    right: 20px;
+}
+
+/* Indicators */
+.slider-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(26, 82, 118, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.indicator.active {
+    background: var(--secondary-color);
+    transform: scale(1.2);
+}
+
+.indicator:hover {
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.indicator.active::after {
+    background: rgba(212, 172, 13, 0.2);
+}
+
+/* Progress Bar */
+.slider-progress {
+    height: 4px;
+    background: rgba(26, 82, 118, 0.2);
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--secondary-color);
+    width: 50%;
+    transition: width 0.3s ease;
+}
+
 .gallery-carousel {
     position: relative;
     max-width: 1200px;
@@ -1783,11 +1972,12 @@ header.scrolled .brand-logo {
 .teacher-photo {
     width: 240px;
     height: 240px;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     border-radius: 50%;
     border: 5px solid var(--secondary-color);
     background: #fff;
+    max-width: 100%;
 }
 
 .teacher-info {
@@ -1959,13 +2149,19 @@ header.scrolled .brand-logo {
 }
 
 .program-card.featured {
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1a4a52 100%);
     color: var(--light-text);
-    border-top: 5px solid var(--secondary-color);
-    max-width: 900px; /* allow featured to be wider but still centered */
-    grid-column: 1 / -1; /* center across the grid */
-    margin-left: auto;
-    margin-right: auto;
+    border: none;
+    border-radius: 20px;
+    max-width: 100%;
+    width: 100%;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(26, 82, 118, 0.3);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* Remove duplicate icon above title for the featured card to avoid repetition with right-side images */
@@ -1974,17 +2170,19 @@ header.scrolled .brand-logo {
 }
 
 .program-card.featured::before {
-    content: 'Featured';
+    content: 'FEATURED';
     position: absolute;
-    top: 15px;
-    right: -30px;
-    background: var(--secondary-color);
-    color: white;
-    padding: 5px 30px;
-    font-size: 0.8rem;
-    transform: rotate(45deg);
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(45deg, var(--secondary-color), #ffd700);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     z-index: 10;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Prevent the ribbon from overflowing the viewport on small screens */
@@ -2052,16 +2250,18 @@ header.scrolled .brand-logo {
 
 .program-card.featured h3 {
     color: var(--light-text);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .program-card.featured h3::after {
-    background: var(--light-text);
-}
-
-/* Slightly larger title now that the top icon is removed */
-.program-card.featured h3 {
-    font-size: 2rem;
-    margin-top: 4px;
+    background: var(--secondary-color);
+    height: 4px;
+    margin: 1rem auto 0;
+    width: 80px;
 }
 
 .program-card p {
@@ -2102,6 +2302,19 @@ header.scrolled .brand-logo {
     flex-shrink: 0;
 }
 
+.program-card.featured p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.program-card.featured .program-features {
+    text-align: left;
+    margin: 2rem 0;
+}
+
 .program-card.featured .program-features i {
     color: var(--secondary-color);
 }
@@ -2112,177 +2325,235 @@ header.scrolled .brand-logo {
     min-width: 120px;
 }
 
-/* Featured Durus layout: 2-column with composite covers */
+.program-card.featured .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.program-card.featured .btn {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border: 2px solid var(--secondary-color);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    min-width: 160px;
+    text-align: center;
+}
+
+.program-card.featured .btn:hover {
+    background: transparent;
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(218, 165, 32, 0.3);
+}
+
+/* Completely rewritten featured card layout */
 .featured-grid {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr;
-    gap: 28px;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
 }
 
 .featured-left {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
 }
 
 .featured-right {
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    order: -1; /* Show books first on mobile */
 }
 
 .covers-composite {
     position: relative;
-    width: 320px;
-    height: 280px;
+    width: 100%;
+    max-width: 400px;
+    height: 180px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .covers-composite .cover {
     position: absolute;
-    width: 140px;
-    height: 190px;
-    object-fit: contain;
-    border-radius: 12px;
-    box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+    width: 90px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     background: white;
+    transition: all 0.3s ease;
+    border: 2px solid #fff;
 }
 
-.covers-composite .cover-1 { left: 0; top: 52px; transform: rotate(-6deg); }
-.covers-composite .cover-2 { left: 90px; top: 22px; z-index: 2; }
-.covers-composite .cover-3a { left: 180px; top: 52px; transform: rotate(6deg); }
-.covers-composite .cover-3b { left: 120px; top: 140px; width: 120px; height: 160px; z-index: 3; transform: rotate(2deg); }
+/* Stack the books in a layered formation */
+.covers-composite .cover-1 {
+    z-index: 4;
+    transform: translateX(-60px) translateY(5px) rotate(-8deg);
+}
 
-@media (max-width: 992px) {
+.covers-composite .cover-2 {
+    z-index: 3;
+    transform: translateX(-20px) translateY(-3px) rotate(-3deg);
+}
+
+.covers-composite .cover-3a {
+    z-index: 2;
+    transform: translateX(20px) translateY(-3px) rotate(3deg);
+}
+
+.covers-composite .cover-3b {
+    z-index: 1;
+    transform: translateX(60px) translateY(5px) rotate(8deg);
+}
+
+.covers-composite .cover-1:hover {
+    transform: translateX(-60px) translateY(-15px) rotate(-4deg) scale(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+.covers-composite .cover-2:hover {
+    transform: translateX(-20px) translateY(-18px) rotate(-1deg) scale(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+.covers-composite .cover-3a:hover {
+    transform: translateX(20px) translateY(-18px) rotate(1deg) scale(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+.covers-composite .cover-3b:hover {
+    transform: translateX(60px) translateY(-15px) rotate(4deg) scale(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+/* Desktop layout: side by side */
+@media (min-width: 992px) {
     .featured-grid {
-        grid-template-columns: 1fr;
-        gap: 22px;
+        flex-direction: row;
+        align-items: center;
+        gap: 3rem;
     }
-    .featured-right .covers-composite { margin: 0 auto; }
+    
+    .featured-left {
+        flex: 2;
+        text-align: left;
+    }
+    
+    .featured-right {
+        flex: 1;
+        order: 0;
+    }
+    
+    .program-card.featured h3 {
+        text-align: center;
+    }
+    
+    .program-card.featured p {
+        text-align: left;
+    }
 }
 
-/* Mobile adjustments so the new title size scales well */
+/* Simple mobile responsive styles */
 @media (max-width: 768px) {
-    .program-card.featured h3 {
-        font-size: 1.6rem;
-    }
-    /* Show the covers above the title/content on mobile for better visual flow */
-    .featured-grid { 
-        grid-template-columns: 1fr; 
-        /* Force image block above content block consistently */
-        grid-template-areas: 
-            "right"
-            "left";
-    }
-    .featured-right { 
-        grid-area: right; 
-        align-self: start; /* keep covers pinned to top of the grid */
-    }
-    .featured-left { grid-area: left; }
-    /* Make the composite image smaller on mobile */
-    .featured-right .covers-composite {
-        transform: scale(0.8);
-        transform-origin: center;
-    }
-    /* Center CTAs within the featured card on mobile */
-    .program-card.featured .cta-buttons { justify-content: center; }
-
-    /* Ensure the featured Durus card is perfectly centered on mobile */
-    .program-cards { width: 100%; }
     .program-card.featured {
-        /* Ultra-robust mobile containerization */
-        width: calc(100% - 2 * var(--container-padding-mobile));
-        max-width: 600px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        
-        /* Triple-layer padding protection */
-        padding: 30px var(--container-padding-mobile);
-        
-        /* Prevent overflow on any device */
-        overflow: hidden;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        
-        /* Consistent positioning */
-        position: relative;
-        left: 0;
-        right: 0;
+        padding: 1.5rem;
+        margin: 1rem;
     }
-    /* Keep featured grid content centered for narrow screens */
-    .featured-grid { place-items: center; }
-    .featured-left { 
-        align-items: center; 
-        text-align: center; 
-        /* Bulletproof inner spacing with multiple fallbacks */
-        padding: 0 clamp(8px, 3vw, 20px);
+    
+    .program-card.featured h3 {
+        font-size: 2rem;
+    }
+    
+    .covers-composite {
+        max-width: 320px;
+        height: 140px;
+    }
+    
+    .covers-composite .cover {
+        width: 70px;
+        height: 100px;
+    }
+    
+    .covers-composite .cover-1 {
+        transform: translateX(-45px) translateY(3px) rotate(-6deg);
+    }
+    
+    .covers-composite .cover-2 {
+        transform: translateX(-15px) translateY(-2px) rotate(-2deg);
+    }
+    
+    .covers-composite .cover-3a {
+        transform: translateX(15px) translateY(-2px) rotate(2deg);
+    }
+    
+    .covers-composite .cover-3b {
+        transform: translateX(45px) translateY(3px) rotate(6deg);
+    }
+    
+    .program-card.featured .cta-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .program-card.featured .btn {
         width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        
-        /* Prevent any layout breakage */
-        overflow: hidden;
-        word-wrap: break-word;
-        overflow-wrap: anywhere;
-    }
-
-    /* Ultimate protection for all featured card content */
-    .program-card.featured .featured-left > * { 
-        max-width: 100%; 
-        box-sizing: border-box;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .program-card.featured .cta-buttons { 
-        width: 100%; 
-        max-width: 100%;
-        display: flex;
-        justify-content: center; 
-        align-items: center;
-        padding: 0 clamp(4px, 2vw, 12px);
-        box-sizing: border-box;
-        gap: clamp(8px, 2vw, 16px);
-    }
-    
-    .program-card.featured .btn { 
-        flex: 1;
-        min-width: 0; /* Allow flex shrinking */
-        max-width: clamp(200px, 40vw, 320px);
-        margin: 0;
-        box-sizing: border-box;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .featured-right { justify-content: center; }
-    /* Move ribbon fully inside the card so it doesn't bias alignment */
-    .program-card.featured::before {
-        right: 10px;
-        top: 10px;
-        transform: rotate(0deg);
-        border-radius: 8px;
-        padding: 4px 10px;
+        max-width: 280px;
     }
 }
 
 @media (max-width: 480px) {
-    /* Further reduce visual size on very small screens */
-    .featured-right .covers-composite { transform: scale(0.72); }
-    
-    /* Ultra-tight containerization for smallest screens */
-    .program-card.featured { 
-        max-width: calc(100vw - 2 * var(--safe-area-padding));
-        width: calc(100% - 2 * var(--safe-area-padding));
-        margin: 0 auto;
-        padding: 20px var(--safe-area-padding);
+    .program-card.featured {
+        padding: 1rem;
+        margin: 0.5rem;
     }
     
-    /* Ensure text never touches edges on any device */
-    .program-card.featured .featured-left {
-        padding: 0 clamp(6px, 4vw, 16px);
+    .program-card.featured h3 {
+        font-size: 1.8rem;
     }
     
-    .program-card.featured .cta-buttons {
-        padding: 0 clamp(2px, 1vw, 8px);
+    .covers-composite {
+        max-width: 260px;
+        height: 110px;
+    }
+    
+    .covers-composite .cover {
+        width: 55px;
+        height: 75px;
+    }
+    
+    .covers-composite .cover-1 {
+        transform: translateX(-35px) translateY(2px) rotate(-5deg);
+    }
+    
+    .covers-composite .cover-2 {
+        transform: translateX(-12px) translateY(-1px) rotate(-2deg);
+    }
+    
+    .covers-composite .cover-3a {
+        transform: translateX(12px) translateY(-1px) rotate(2deg);
+    }
+    
+    .covers-composite .cover-3b {
+        transform: translateX(35px) translateY(2px) rotate(5deg);
     }
 }
 
@@ -2294,22 +2565,7 @@ header.scrolled .brand-logo {
     }
 }
 
-/* Programs section specific mobile handling */
-@media (max-width: 768px) {
-    .programs .container {
-        padding: 0 var(--container-padding-mobile);
-    }
-    .program-cards {
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    .program-card.featured .featured-left {
-        width: 100%;
-        max-width: 640px;
-        margin-inline: auto;
-    }
-    .covers-composite { max-width: 100%; }
-}
+
 
 /* CTA Section */
 .cta {
@@ -2871,9 +3127,7 @@ footer .container {
         right: auto;
     }
     
-    .program-card.featured {
-        grid-column: auto;
-    }
+
     
     .program-cards {
         grid-template-columns: 1fr;
@@ -2883,6 +3137,15 @@ footer .container {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         max-width: 100%;
         overflow: hidden;
+    }
+    
+    .teacher-image {
+        height: 220px;
+    }
+    
+    .teacher-photo {
+        width: 200px;
+        height: 200px;
     }
     
     .contact-content {
@@ -2904,38 +3167,39 @@ footer .container {
         gap: 30px;
     }
     
-    .gallery-carousel {
+    .modern-slider {
         margin: 30px auto 0;
     }
     
-    .gallery-slide {
+    .slide {
         aspect-ratio: 16 / 9;
         height: auto;
     }
     
-    .gallery-btn {
+    .slider-nav {
         width: 40px;
         height: 40px;
     }
     
-    .gallery-btn i {
-        font-size: 1rem;
+    .slider-nav svg {
+        width: 20px;
+        height: 20px;
     }
     
-    .gallery-overlay {
+    .slide-content {
         padding: 30px 20px 15px;
     }
     
-    .gallery-overlay h4 {
+    .slide-content h3 {
         font-size: 1rem;
     }
     
-    .gallery-indicators {
+    .slider-indicators {
         padding: 15px;
         gap: 8px;
     }
     
-    .gallery-dot {
+    .indicator {
         width: 10px;
         height: 10px;
     }
@@ -3077,6 +3341,8 @@ footer .container {
     
     .dr-rahim-content {
         flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
     
     .dr-rahim-image {
@@ -3214,38 +3480,43 @@ footer .container {
         padding: 15px;
     }
     
-    .gallery-slide {
+    .slide {
         aspect-ratio: 16 / 9;
         height: auto;
     }
     
-    .gallery-btn {
+    .slider-nav {
         width: 35px;
         height: 35px;
     }
     
-    .gallery-btn i {
-        font-size: 0.9rem;
+    .slider-nav svg {
+        width: 18px;
+        height: 18px;
     }
     
-    .gallery-nav {
-        padding: 0 15px;
+    .slider-nav.prev {
+        left: 15px;
     }
     
-    .gallery-overlay {
+    .slider-nav.next {
+        right: 15px;
+    }
+    
+    .slide-content {
         padding: 20px 15px 10px;
     }
     
-    .gallery-overlay h4 {
+    .slide-content h3 {
         font-size: 0.9rem;
     }
     
-    .gallery-indicators {
+    .slider-indicators {
         padding: 12px;
         gap: 6px;
     }
     
-    .gallery-dot {
+    .indicator {
         width: 8px;
         height: 8px;
     }
@@ -3263,11 +3534,16 @@ footer .container {
     }
     
     .teacher-image {
-        height: 150px;
+        height: 200px;
     }
     
     .teacher-image i {
         font-size: 3rem;
+    }
+    
+    .teacher-photo {
+        width: 180px;
+        height: 180px;
     }
     
     .teacher-info {
