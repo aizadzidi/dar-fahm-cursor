@@ -127,12 +127,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
 
     // Observe elements for animation
-    const animateElements = document.querySelectorAll('.program-card, .teacher-card, .contact-item, .founder-content, .testimonial-card, .achievement, .feature, .timeline-content');
+    const animateElements = document.querySelectorAll('.program-card, .teacher-card, .contact-item, .founder-content, .testimonial-card, .achievement, .feature, .timeline-content, .faq-item');
     
     animateElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        el.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
         observer.observe(el);
     });
 
@@ -402,6 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addLazyLoading();
     addSearchFunctionality();
     initGalleryCarousel();
+    initFAQAccordion();
     
     // Add accessibility improvements
     function improveAccessibility() {
@@ -574,3 +575,134 @@ style.textContent = `
 `;
 
 document.head.appendChild(style);
+
+// FAQ accordion logic
+function initFAQAccordion() {
+    const items = document.querySelectorAll('.faq-item');
+    const questions = document.querySelectorAll('.faq-question');
+    if (questions.length === 0) return;
+
+    const closeItem = (item) => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        if (!question || !answer) return;
+        // If the item is not open, ensure it's in a closed state and do nothing else
+        if (!item.classList.contains('open')) {
+            question.setAttribute('aria-expanded', 'false');
+            answer.getAnimations().forEach(a => a.cancel());
+            answer.style.height = '0px';
+            answer.style.opacity = '0';
+            answer.style.transform = 'translateY(8px)';
+            answer.style.paddingTop = '0px';
+            answer.style.paddingBottom = '0px';
+            const icon = question.querySelector('.faq-icon');
+            if (icon) icon.textContent = '+';
+            return;
+        }
+
+        question.setAttribute('aria-expanded', 'false');
+        item.classList.remove('open');
+        // Cancel any in-flight animations
+        answer.getAnimations().forEach(a => a.cancel());
+        // From current natural height to 0 with fade/translate and padding collapse
+        const currentHeight = answer.scrollHeight;
+        answer.style.height = currentHeight + 'px';
+        answer.style.paddingTop = '12px';
+        answer.style.paddingBottom = '18px';
+        const anim = answer.animate([
+            { height: currentHeight + 'px', opacity: 1, transform: 'translateY(0)', paddingTop: '12px', paddingBottom: '18px' },
+            { height: '0px', opacity: 0, transform: 'translateY(8px)', paddingTop: '0px', paddingBottom: '0px' }
+        ], { duration: 400, easing: 'ease-out' });
+        anim.addEventListener('finish', () => {
+            answer.style.height = '0px';
+            answer.style.opacity = '0';
+            answer.style.transform = 'translateY(8px)';
+            answer.style.paddingTop = '0px';
+            answer.style.paddingBottom = '0px';
+        });
+        const icon = question.querySelector('.faq-icon');
+        if (icon) icon.textContent = '+';
+    };
+
+    const openItem = (item) => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        if (!question || !answer) return;
+        question.setAttribute('aria-expanded', 'true');
+        item.classList.add('open');
+        // Cancel any in-flight animations
+        answer.getAnimations().forEach(a => a.cancel());
+        // Measure end height with target paddings applied
+        answer.style.height = 'auto';
+        answer.style.paddingTop = '12px';
+        answer.style.paddingBottom = '18px';
+        const endHeight = answer.scrollHeight;
+        // Set starting collapsed state
+        answer.style.height = '0px';
+        answer.style.opacity = '0';
+        answer.style.transform = 'translateY(8px)';
+        answer.style.paddingTop = '0px';
+        answer.style.paddingBottom = '0px';
+        // Animate to expanded state
+        const anim = answer.animate([
+            { height: '0px', opacity: 0, transform: 'translateY(8px)', paddingTop: '0px', paddingBottom: '0px' },
+            { height: endHeight + 'px', opacity: 1, transform: 'translateY(0)', paddingTop: '12px', paddingBottom: '18px' }
+        ], { duration: 400, easing: 'ease-out' });
+        anim.addEventListener('finish', () => {
+            answer.style.height = 'auto';
+            answer.style.opacity = '1';
+            answer.style.transform = 'none';
+            answer.style.paddingTop = '12px';
+            answer.style.paddingBottom = '18px';
+        });
+        const icon = question.querySelector('.faq-icon');
+        if (icon) icon.textContent = '−';
+    };
+
+    questions.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const currentItem = btn.closest('.faq-item');
+            const isOpen = currentItem && currentItem.classList.contains('open');
+
+            // Determine previously open item (if any) and close it with animation
+            const previouslyOpen = document.querySelector('.faq-item.open');
+            if (previouslyOpen && previouslyOpen !== currentItem) {
+                closeItem(previouslyOpen);
+            }
+
+            // Instantly ensure all other items (not current or previously open) are fully closed (no flicker)
+            items.forEach((it) => {
+                if (it !== currentItem && it !== previouslyOpen) {
+                    const q = it.querySelector('.faq-question');
+                    const a = it.querySelector('.faq-answer');
+                    if (!q || !a) return;
+                    it.classList.remove('open');
+                    q.setAttribute('aria-expanded', 'false');
+                    a.getAnimations().forEach(anim => anim.cancel());
+                    a.style.height = '0px';
+                    a.style.opacity = '0';
+                    a.style.transform = 'translateY(8px)';
+                    a.style.paddingTop = '0px';
+                    a.style.paddingBottom = '0px';
+                    const ic = q.querySelector('.faq-icon');
+                    if (ic) ic.textContent = '+';
+                }
+            });
+
+            // If the clicked one was not open, open it (animate)
+            if (currentItem && !isOpen) {
+                openItem(currentItem);
+            }
+        });
+    });
+
+    // Handle resize: keep open item heights correct
+    window.addEventListener('resize', () => {
+        items.forEach((item) => {
+            if (item.classList.contains('open')) {
+                const answer = item.querySelector('.faq-answer');
+                if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
+    });
+}

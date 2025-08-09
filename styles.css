@@ -1106,8 +1106,8 @@ header.scrolled .brand-logo {
 .dr-rahim-content {
     display: flex;
     align-items: flex-start;
-    gap: 50px;
-    margin-bottom: 40px;
+    gap: 90px;
+    margin-bottom: 150px; /* larger space before legacy card */
 }
 
 .dr-rahim-image {
@@ -1196,6 +1196,7 @@ header.scrolled .brand-logo {
     padding: 30px;
     box-shadow: var(--shadow);
     border-left: 5px solid var(--secondary-color);
+    margin-top: 10px; /* add breathing room above legacy block in case of tight layouts */
 }
 
 .mus-ef-info h3 {
@@ -1231,6 +1232,97 @@ header.scrolled .brand-logo {
 /* Teachers Section */
 .teachers {
     background-color: var(--background-color);
+}
+
+/* FAQ Section */
+.faq {
+    background-color: var(--background-color);
+}
+
+.faq-list {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    gap: 14px;
+    /* Prevent browser scroll anchoring from shifting viewport on expand */
+    overflow-anchor: none;
+}
+
+.faq-item {
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border-left: 3px solid transparent;
+    transition: var(--transition);
+    /* Make each card a stable layout container to reduce reflow ripple */
+    contain: layout paint;
+}
+
+.faq-question {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    font-weight: 600;
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    cursor: pointer;
+}
+
+.faq-question:hover {
+    background: rgba(26, 82, 118, 0.06);
+}
+
+.faq-title {
+    flex: 1;
+}
+
+.faq-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--gradient-secondary);
+    color: #111;
+    font-weight: 900;
+}
+
+.faq-answer {
+    height: 0px;
+    overflow: hidden;
+    padding: 0 20px;
+    color: var(--text-color);
+    line-height: 1.7;
+    background: white;
+    opacity: 0;
+    transform: translateY(8px);
+    will-change: height, opacity, transform, padding-top, padding-bottom;
+}
+
+.faq-item[open] .faq-icon,
+.faq-question[aria-expanded="true"] .faq-icon {
+    background: var(--gradient-primary);
+    color: #fff;
+}
+
+.faq-item.open {
+    border-left-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
+    /* Remove Y-translation to avoid shifting surrounding layout */
+    transform: none;
+}
+
+.faq-item.open .faq-answer {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Gallery Section */
@@ -1549,7 +1641,7 @@ header.scrolled .brand-logo {
 }
 
 .module-section {
-    margin-bottom: 60px;
+    margin-bottom: 120px;
 }
 
 .module-title {
@@ -1590,6 +1682,7 @@ header.scrolled .brand-logo {
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* distribute content so buttons align */
     border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
@@ -1732,6 +1825,7 @@ header.scrolled .brand-logo {
     color: var(--primary-color);
     position: relative;
     padding-bottom: 15px;
+    min-height: 34px; /* keep title heights consistent */
 }
 
 .program-card h3::after {
@@ -1756,6 +1850,7 @@ header.scrolled .brand-logo {
 
 .program-card p {
     margin-bottom: 20px;
+    min-height: 72px; /* normalize text block height for alignment */
 }
 
 .highlight-text {
@@ -1796,7 +1891,9 @@ header.scrolled .brand-logo {
 }
 
 .program-card .btn {
-    margin-top: auto;
+    margin-top: 24px; /* consistent space above buttons */
+    align-self: center; /* ensure buttons align across cards */
+    min-width: 120px;
 }
 
 /* CTA Section */
