@@ -56,6 +56,13 @@
     --gradient-primary: linear-gradient(135deg, #1a5276, #154360);
     --gradient-secondary: linear-gradient(135deg, #d4ac0d, #b7950b);
     --gradient-accent: linear-gradient(135deg, #117a65, #0e6655);
+    
+    /* Responsive Container System */
+    --container-max-width: 1200px;
+    --container-padding-desktop: 24px;
+    --container-padding-tablet: 20px;
+    --container-padding-mobile: 16px;
+    --safe-area-padding: max(var(--container-padding-mobile), env(safe-area-inset-left, 0px));
 }
 
 * {
@@ -77,6 +84,30 @@ body {
     scroll-behavior: smooth;
     font-size: 16px;
     font-weight: 400;
+    
+    /* Global container safety net */
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+}
+
+/* Universal content protection */
+*, *::before, *::after {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* Bulletproof text handling */
+h1, h2, h3, h4, h5, h6, p, div, span {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Prevent any element from breaking layout */
+img, video, iframe, object, embed {
+    max-width: 100%;
+    height: auto;
 }
 
 /* Lock scroll when mobile menu is open */
@@ -84,11 +115,22 @@ body.menu-open {
     overflow: hidden;
 }
 
+/* Universal Container System - Bulletproof Responsive Design */
 .container {
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: var(--container-max-width);
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 var(--container-padding-desktop);
+    box-sizing: border-box;
+    
+    /* Prevent any content from breaking out */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    
+    /* Ensure consistent behavior across all browsers */
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .arabic-accent {
@@ -328,12 +370,9 @@ header.scrolled .brand-logo {
 
 /* Responsive adjustments for the logo */
 @media (max-width: 768px) {
-    /* Strengthen global horizontal padding for all sections on mobile */
+    /* Responsive Container Breakpoints */
     .container {
-        width: 100%;
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
-        box-sizing: border-box;
+        padding: 0 var(--container-padding-tablet);
     }
     .brand-logo {
         height: 64px;
@@ -1701,6 +1740,10 @@ header.scrolled .brand-logo {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .teacher-card {
@@ -1709,6 +1752,10 @@ header.scrolled .brand-logo {
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: var(--transition);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .teacher-card:hover {
@@ -2141,42 +2188,70 @@ header.scrolled .brand-logo {
     /* Ensure the featured Durus card is perfectly centered on mobile */
     .program-cards { width: 100%; }
     .program-card.featured {
-        width: 100%;
-        max-width: 600px; /* comfortable reading width on phones */
-        margin-left: auto;
-        margin-right: auto;
+        /* Ultra-robust mobile containerization */
+        width: calc(100% - 2 * var(--container-padding-mobile));
+        max-width: 600px;
+        margin: 0 auto;
         box-sizing: border-box;
-        /* Ensure clear breathing room inside card on mobile */
-        padding-left: 24px;
-        padding-right: 24px;
+        
+        /* Triple-layer padding protection */
+        padding: 30px var(--container-padding-mobile);
+        
+        /* Prevent overflow on any device */
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        
+        /* Consistent positioning */
+        position: relative;
+        left: 0;
+        right: 0;
     }
     /* Keep featured grid content centered for narrow screens */
     .featured-grid { place-items: center; }
     .featured-left { 
         align-items: center; 
         text-align: center; 
-        /* Stronger inner padding so text/buttons never touch card edge */
-        padding-left: 14px; 
-        padding-right: 14px; 
+        /* Bulletproof inner spacing with multiple fallbacks */
+        padding: 0 clamp(8px, 3vw, 20px);
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        
+        /* Prevent any layout breakage */
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
     }
 
-    /* Radical spacing guardrails inside the featured card on phones */
+    /* Ultimate protection for all featured card content */
     .program-card.featured .featured-left > * { 
         max-width: 100%; 
         box-sizing: border-box;
+        margin-left: auto;
+        margin-right: auto;
     }
+    
     .program-card.featured .cta-buttons { 
         width: 100%; 
+        max-width: 100%;
+        display: flex;
         justify-content: center; 
-        padding-left: 6px; 
-        padding-right: 6px; 
+        align-items: center;
+        padding: 0 clamp(4px, 2vw, 12px);
+        box-sizing: border-box;
+        gap: clamp(8px, 2vw, 16px);
     }
+    
     .program-card.featured .btn { 
-        width: 100%; 
-        max-width: 320px; 
-        margin-left: auto; 
-        margin-right: auto; 
+        flex: 1;
+        min-width: 0; /* Allow flex shrinking */
+        max-width: clamp(200px, 40vw, 320px);
+        margin: 0;
+        box-sizing: border-box;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .featured-right { justify-content: center; }
     /* Move ribbon fully inside the card so it doesn't bias alignment */
@@ -2192,17 +2267,37 @@ header.scrolled .brand-logo {
 @media (max-width: 480px) {
     /* Further reduce visual size on very small screens */
     .featured-right .covers-composite { transform: scale(0.72); }
-    /* Slightly tighter card max-width for very small screens */
-    .program-card.featured { max-width: 520px; }
+    
+    /* Ultra-tight containerization for smallest screens */
+    .program-card.featured { 
+        max-width: calc(100vw - 2 * var(--safe-area-padding));
+        width: calc(100% - 2 * var(--safe-area-padding));
+        margin: 0 auto;
+        padding: 20px var(--safe-area-padding);
+    }
+    
+    /* Ensure text never touches edges on any device */
+    .program-card.featured .featured-left {
+        padding: 0 clamp(6px, 4vw, 16px);
+    }
+    
+    .program-card.featured .cta-buttons {
+        padding: 0 clamp(2px, 1vw, 8px);
+    }
 }
 
 /* Guard against edge-to-edge rendering in Program section on some Android webviews */
+/* Add comprehensive mobile container system */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--safe-area-padding);
+    }
+}
+
+/* Programs section specific mobile handling */
 @media (max-width: 768px) {
     .programs .container {
-        width: 100%;
-        max-width: 1200px;
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
+        padding: 0 var(--container-padding-mobile);
     }
     .program-cards {
         padding-left: 2px;
@@ -2786,6 +2881,8 @@ footer .container {
     
     .teachers-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        max-width: 100%;
+        overflow: hidden;
     }
     
     .contact-content {
@@ -2988,6 +3085,9 @@ footer .container {
     
     .teachers-grid {
         grid-template-columns: 1fr;
+        max-width: 100%;
+        overflow: hidden;
+        gap: 20px;
     }
     
     .mus-ef-info {
@@ -3013,6 +3113,29 @@ footer .container {
 }
 
 @media (max-width: 480px) {
+    /* Ensure teachers section has proper containment on very small screens */
+    .teachers .container {
+        padding: 0 var(--safe-area-padding);
+        max-width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    
+    .teachers-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .teacher-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
     section {
         padding: 60px 0;
     }
@@ -3149,6 +3272,15 @@ footer .container {
     
     .teacher-info {
         padding: 15px;
+    }
+    
+    .teacher-card {
+        margin: 0 auto;
+        max-width: 400px;
+        width: 100%;
+        box-sizing: border-box;
+        transform: none !important;
+        position: static !important;
     }
     
     .teacher-info h3 {
