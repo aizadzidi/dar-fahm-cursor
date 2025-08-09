@@ -193,28 +193,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add parallax effect to hero section
+    // Add parallax effect to hero section (desktop only and when motion is allowed)
     let lastScrollY = window.pageYOffset;
-    
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.hero');
-        const speed = 0.3;
-        
-        if (parallax) {
-            parallax.style.transform = `translateY(${scrolled * speed}px)`;
-        }
-        
-        // Hide/show header on scroll
-        if (header) {
-            if (scrolled > lastScrollY && scrolled > 100) {
-                header.classList.add('hidden');
-            } else {
-                header.classList.remove('hidden');
+    const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+    const enableParallax = allowMotion && window.innerWidth >= 992;
+
+    if (enableParallax) {
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero');
+            const speed = 0.3;
+            if (parallax) parallax.style.transform = `translateY(${scrolled * speed}px)`;
+
+            // Hide/show header on scroll
+            if (header) {
+                if (scrolled > lastScrollY && scrolled > 100) {
+                    header.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                }
+                lastScrollY = scrolled;
             }
-            lastScrollY = scrolled;
-        }
-    });
+        });
+    } else {
+        // Maintain header hide/show without parallax to keep layout stable on mobile
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            if (header) {
+                if (scrolled > lastScrollY && scrolled > 100) {
+                    header.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                }
+                lastScrollY = scrolled;
+            }
+        });
+    }
 
     // Add hover effects to program cards
     const programCards = document.querySelectorAll('.program-card');

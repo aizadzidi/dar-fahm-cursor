@@ -328,6 +328,13 @@ header.scrolled .brand-logo {
 
 /* Responsive adjustments for the logo */
 @media (max-width: 768px) {
+    /* Strengthen global horizontal padding for all sections on mobile */
+    .container {
+        width: 100%;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+        box-sizing: border-box;
+    }
     .brand-logo {
         height: 64px;
     }
@@ -1933,6 +1940,17 @@ header.scrolled .brand-logo {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Prevent the ribbon from overflowing the viewport on small screens */
+@media (max-width: 768px) {
+    .program-card.featured::before {
+        right: 10px;
+        top: 10px;
+        transform: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+}
+
 .program-icon {
     margin-bottom: 20px;
     width: 120px;
@@ -2110,11 +2128,57 @@ header.scrolled .brand-logo {
     }
     /* Center CTAs within the featured card on mobile */
     .program-card.featured .cta-buttons { justify-content: center; }
+
+    /* Ensure the featured Durus card is perfectly centered on mobile */
+    .program-cards { width: 100%; }
+    .program-card.featured {
+        width: 100%;
+        max-width: 600px; /* comfortable reading width on phones */
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
+    /* Keep featured grid content centered for narrow screens */
+    .featured-grid { place-items: center; }
+    .featured-left { align-items: center; text-align: center; }
+    .featured-right { justify-content: center; }
+    /* Move ribbon fully inside the card so it doesn't bias alignment */
+    .program-card.featured::before {
+        right: 10px;
+        top: 10px;
+        transform: rotate(0deg);
+        border-radius: 8px;
+        padding: 4px 10px;
+    }
 }
 
 @media (max-width: 480px) {
     /* Further reduce visual size on very small screens */
     .featured-right .covers-composite { transform: scale(0.72); }
+    /* Slightly tighter card max-width for very small screens */
+    .program-card.featured { max-width: 520px; }
+}
+
+/* Guard against edge-to-edge rendering in Program section on some Android webviews */
+@media (max-width: 768px) {
+    .programs .container {
+        width: 100%;
+        max-width: 1200px;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+    .program-cards {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    .program-card.featured .featured-left {
+        width: 100%;
+        max-width: 640px;
+        margin-inline: auto;
+    }
+    .covers-composite { max-width: 100%; }
 }
 
 /* CTA Section */
@@ -2769,15 +2833,18 @@ footer .container {
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        padding: 80px 20px 50px;
+        /* leave space for header and add safe-area padding at bottom */
+        padding: 90px 20px calc(24px + env(safe-area-inset-bottom));
         box-shadow: none;
         z-index: 1000;
         transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
         opacity: 0;
         visibility: hidden;
         transform: translateY(-20px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
     
     .nav-links.active {
@@ -2788,14 +2855,14 @@ footer .container {
     }
     
     .nav-links li {
-        margin: 12px 0;
+        margin: 8px 0;
         text-align: center;
         transform: translateY(30px);
         opacity: 0;
         transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
-        transition-delay: calc(0.08s * var(--item-index, 0));
+        transition-delay: calc(0.06s * var(--item-index, 0));
         width: 100%;
-        max-width: 280px;
+        max-width: 260px;
     }
     
     .nav-links.active li {
@@ -2806,12 +2873,12 @@ footer .container {
     .nav-links li a {
         display: block;
         width: 100%;
-        padding: 15px 20px;
-        font-size: 1.1rem;
+        padding: 12px 16px;
+        font-size: 1rem;
         font-weight: 600;
         background-color: rgba(26, 82, 118, 0.05);
         border-radius: 12px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         transition: all 0.3s ease;
         border: 1px solid transparent;
     }
