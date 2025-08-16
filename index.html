@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darul Fahmi - Mastering Arabic | Pembelajaran Bahasa Arab Atas Talian</title>
     <meta name="description" content="Darul Fahmi - Mastering Arabic menawarkan kelas Bahasa Arab secara atas talian dengan silibus Durus al-Lughah. Pembelajaran yang mudah, sistematik dan berkesan.">
+    <link rel="icon" type="image/png" href="images/logo-1.png">
+    <link rel="apple-touch-icon" href="images/logo-1.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -33,6 +35,10 @@
                 <i class="fas fa-bars"></i>
             </div>
         </div>
+        <!-- Scroll Progress Bar -->
+        <div class="scroll-progress-bar">
+            <div class="progress-fill"></div>
+        </div>
     </header>
 
     <!-- Hero Section -->
@@ -52,77 +58,141 @@
 
     <!-- Removed hidden duplicate FAQ section near top to ensure anchor targets the visible FAQ below -->
 
-    <!-- Feedback Section -->
-    <section id="maklum" class="feedback">
+    <!-- Modern Testimonials Carousel -->
+    <section id="maklum" class="modern-testimonials">
         <div class="container">
             <div class="section-header">
                 <h2>Maklum Balas Pelajar</h2>
                 <div class="divider"></div>
                 <p>Pengalaman sebenar pelajar yang telah mengikuti kelas Darul Fahmi</p>
             </div>
-
-            <div class="feedback-container">
-                <div class="feedback-item">
-                    <div class="feedback-content">
-                        <div class="feedback-header">
-                            <img class="feedback-avatar" src="images/avatar-placeholder.svg" alt="WR Rusnah" onerror="this.style.display='none';">
-                            <div class="feedback-author">
-                                <h4>WR Rusnah</h4>
+        </div>
+        
+        <div class="carousel-container">
+            <div class="carousel-mask">
+                <div class="carousel-scroll">
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Saya tamat buku Durus Lughah dengan Ustaz Fahmi dari buku 1 hingga buku 3. Saya suka dengan cara penyampaian ustaz yang terperinci, selain mengajar apa yang ada dalam buku Durus Lughah, ustaz juga menyediakan maklumat tambahan seperti cara menggunakan kamus al-Maani dan maklumat lain yang berkaitan beserta nota dan rakaman kelas untuk rujukan. Kefahaman saya tentang qawaid bertambah baik, alhamdulillah.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="WR Rusnah" onerror="this.style.display='none';">
+                            <div>
+                                <strong>WR Rusnah</strong>
+                                <span>Pelajar Durus Lughah</span>
                             </div>
                         </div>
-                        <p>Saya tamat buku Durus Lughah dengan Ustaz Fahmi dari buku 1 hingga buku 3. Saya suka dengan cara penyampaian ustaz yang terperinci, selain mengajar apa yang ada dalam buku Durus Lughah, ustaz juga menyediakan maklumat tambahan seperti cara menggunakan kamus al-Maani dan maklumat lain yang berkaitan beserta nota dan rakaman kelas untuk rujukan. Kefahaman saya tentang qawaid bertambah baik, alhamdulillah.</p>
                     </div>
-                </div>
 
-                <div class="feedback-item">
-                    <div class="feedback-content">
-                        <div class="feedback-header">
-                            <img class="feedback-avatar" src="images/avatar-placeholder.svg" alt="Novi Fitriani" onerror="this.style.display='none';">
-                            <div class="feedback-author">
-                                <h4>Novi Fitriani</h4>
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Alhamdulillah, bersyukur dapat join kelas Ustadz Fahmi. Banyak ilmu baru yang saya dapat untuk memahami Bahasa Arab. Penjelasan Ustadz sangat terstruktur dan beliau sabar menjelaskan hal-hal yang belum kita fahami. Jazaakallah khairan Ustadz atas ilmunya.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Novi Fitriani" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Novi Fitriani</strong>
+                                <span>Pelajar Durus Lughah</span>
                             </div>
                         </div>
-                        <p>Alhamdulillah, bersyukur dapat join kelas Ustadz Fahmi. Banyak ilmu baru yang saya dapat untuk memahami Bahasa Arab. Penjelasan Ustadz sangat terstruktur dan beliau sabar menjelaskan hal-hal yang belum kita fahami. Jazaakallah khairan Ustadz atas ilmunya.</p>
                     </div>
-                </div>
 
-                <div class="feedback-item">
-                    <div class="feedback-content">
-                        <div class="feedback-header">
-                            <img class="feedback-avatar" src="images/avatar-placeholder.svg" alt="Nur Fatihah" onerror="this.style.display='none';">
-                            <div class="feedback-author">
-                                <h4>Nur Fatihah</h4>
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Saya bekas pelajar... gred naik dari G ke A waktu SPM. Dapat nota lengkap dan mudah faham. Pelajar tidak ramai jadi semua dapat perhatian dan lebih fokus. Kalau basic lemah pun mereka tolong sampai mahir.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Nur Fatihah" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Nur Fatihah</strong>
+                                <span>Bekas Pelajar SPM</span>
                             </div>
                         </div>
-                        <p>Saya bekas pelajar... gred naik dari G ke A waktu SPM. Dapat nota lengkap dan mudah faham. Pelajar tidak ramai jadi semua dapat perhatian dan lebih fokus. Kalau basic lemah pun mereka tolong sampai mahir.</p>
                     </div>
-                </div>
 
-                <div class="feedback-item">
-                    <div class="feedback-content">
-                        <div class="feedback-header">
-                            <img class="feedback-avatar" src="images/avatar-placeholder.svg" alt="Zahra Zakuan" onerror="this.style.display='none';">
-                            <div class="feedback-author">
-                                <h4>Zahra Zakuan</h4>
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Best! Kalau tak faham, ustaz explain sampai faham dan semua nota sangat berguna. Dulu saya selalu dapat D/E dalam exam tapi SPM dapat A! Ustaz Fahmi, Ustaz Ammar, Ustaz Arfan semua sangat membantu saya dan kawan-kawan.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Zahra Zakuan" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Zahra Zakuan</strong>
+                                <span>Pelajar SPM</span>
                             </div>
                         </div>
-                        <p>Best! Kalau tak faham, ustaz explain sampai faham dan semua nota sangat berguna. Dulu saya selalu dapat D/E dalam exam tapi SPM dapat A! Ustaz Fahmi, Ustaz Ammar, Ustaz Arfan semua sangat membantu saya dan kawan-kawan.</p>
                     </div>
-                </div>
 
-                <div class="feedback-item">
-                    <div class="feedback-content">
-                        <div class="feedback-header">
-                            <img class="feedback-avatar" src="images/avatar-placeholder.svg" alt="Ikilila El Fudhla" onerror="this.style.display='none';">
-                            <div class="feedback-author">
-                                <h4>Ikilila El Fudhla</h4>
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Jelas, lugas, singkat, padat. Sangat mudah difahami dan sangat cocok bagi para pemula yang ingin belajar Bahasa Arab dari dasar. Jazakumullahu khairan wa barakallahu fiikum.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Ikilila El Fudhla" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Ikilila El Fudhla</strong>
+                                <span>Pelajar Pemula</span>
                             </div>
                         </div>
-                        <p>Jelas, lugas, singkat, padat. Sangat mudah difahami dan sangat cocok bagi para pemula yang ingin belajar Bahasa Arab dari dasar. Jazakumullahu khairan wa barakallahu fiikum.</p>
+                    </div>
+
+                    <!-- Duplicates for infinite scroll -->
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Saya tamat buku Durus Lughah dengan Ustaz Fahmi dari buku 1 hingga buku 3. Saya suka dengan cara penyampaian ustaz yang terperinci, selain mengajar apa yang ada dalam buku Durus Lughah, ustaz juga menyediakan maklumat tambahan seperti cara menggunakan kamus al-Maani dan maklumat lain yang berkaitan beserta nota dan rakaman kelas untuk rujukan. Kefahaman saya tentang qawaid bertambah baik, alhamdulillah.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="WR Rusnah" onerror="this.style.display='none';">
+                            <div>
+                                <strong>WR Rusnah</strong>
+                                <span>Pelajar Durus Lughah</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Alhamdulillah, bersyukur dapat join kelas Ustadz Fahmi. Banyak ilmu baru yang saya dapat untuk memahami Bahasa Arab. Penjelasan Ustadz sangat terstruktur dan beliau sabar menjelaskan hal-hal yang belum kita fahami. Jazaakallah khairan Ustadz atas ilmunya.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Novi Fitriani" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Novi Fitriani</strong>
+                                <span>Pelajar Durus Lughah</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Saya bekas pelajar... gred naik dari G ke A waktu SPM. Dapat nota lengkap dan mudah faham. Pelajar tidak ramai jadi semua dapat perhatian dan lebih fokus. Kalau basic lemah pun mereka tolong sampai mahir.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Nur Fatihah" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Nur Fatihah</strong>
+                                <span>Bekas Pelajar SPM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Best! Kalau tak faham, ustaz explain sampai faham dan semua nota sangat berguna. Dulu saya selalu dapat D/E dalam exam tapi SPM dapat A! Ustaz Fahmi, Ustaz Ammar, Ustaz Arfan semua sangat membantu saya dan kawan-kawan.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Zahra Zakuan" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Zahra Zakuan</strong>
+                                <span>Pelajar SPM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>Jelas, lugas, singkat, padat. Sangat mudah difahami dan sangat cocok bagi para pemula yang ingin belajar Bahasa Arab dari dasar. Jazakumullahu khairan wa barakallahu fiikum.</blockquote>
+                        <div class="author">
+                            <img src="images/avatar-placeholder.svg" alt="Ikilila El Fudhla" onerror="this.style.display='none';">
+                            <div>
+                                <strong>Ikilila El Fudhla</strong>
+                                <span>Pelajar Pemula</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 

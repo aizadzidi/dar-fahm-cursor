@@ -445,6 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initModernSlider();
     initFAQAccordion();
     initTestimonialsCarousel();
+    initScrollProgress();
     
     // Add accessibility improvements
     function improveAccessibility() {
@@ -890,80 +891,93 @@ function initFAQAccordion() {
     });
 }
 
-// Testimonials (Kalam Asatizah) Carousel
-function initTestimonialsCarousel() {
-    const carousel = document.querySelector('.testimonials-carousel');
-    const track = document.querySelector('.testimonials-track');
-    const slides = document.querySelectorAll('.testimonial-slide');
-    const prev = document.querySelector('.testimonial-prev');
-    const next = document.querySelector('.testimonial-next');
-    const dots = document.querySelectorAll('.testimonial-dot');
-    if (!carousel || !track || slides.length === 0) return;
+// Scroll Progress Bar and Header Background Change
+function initScrollProgress() {
+    const progressBar = document.querySelector('.progress-fill');
+    const header = document.querySelector('header');
+    
+    if (!progressBar || !header) return;
 
-    let current = 0;
-    let autoTimer = null;
+    let scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    let isScrolled = false;
 
-    const getWidth = () => carousel.clientWidth;
-
-    function size() {
-        const w = getWidth();
-        slides.forEach(s => {
-            s.style.width = w + 'px';
-            s.style.flex = '0 0 ' + w + 'px';
-        });
-        track.style.width = (w * slides.length) + 'px';
+    function updateScrollProgress() {
+        const scrollTop = window.pageYOffset;
+        const scrollPercent = Math.min((scrollTop / scrollHeight) * 100, 100);
+        
+        // Update progress bar only
+        progressBar.style.width = scrollPercent + '%';
     }
 
-    function goTo(index) {
-        current = (index + slides.length) % slides.length;
-        track.style.transform = `translateX(${-current * getWidth()}px)`;
-        dots.forEach(d => d.classList.remove('active'));
-        if (dots[current]) dots[current].classList.add('active');
-        slides.forEach((slide, i) => slide.setAttribute('aria-label', `${i + 1} of ${slides.length}`));
-    }
-
-    function startAuto() {
-        stopAuto();
-        autoTimer = setInterval(() => goTo(current + 1), 6000);
-    }
-
-    function stopAuto() {
-        if (autoTimer) clearInterval(autoTimer);
-        autoTimer = null;
-    }
-
-    prev && prev.addEventListener('click', () => { goTo(current - 1); startAuto(); });
-    next && next.addEventListener('click', () => { goTo(current + 1); startAuto(); });
-
-    dots.forEach(dot => dot.addEventListener('click', () => {
-        const i = parseInt(dot.getAttribute('data-index')) || 0;
-        goTo(i);
-        startAuto();
-    }));
-
-    // Touch swipe
-    let startX = 0;
-    let isDown = false;
-    track.addEventListener('touchstart', e => { isDown = true; startX = e.touches[0].clientX; stopAuto(); });
-    track.addEventListener('touchmove', e => {
-        if (!isDown) return;
-        const diff = e.touches[0].clientX - startX;
-        if (Math.abs(diff) > 50) {
-            isDown = false;
-            if (diff > 0) goTo(current - 1); else goTo(current + 1);
-            startAuto();
+    // Throttled scroll event
+    let ticking = false;
+    function handleScroll() {
+        if (!ticking) {
+            requestAnimationFrame(updateScrollProgress);
+            ticking = true;
+            setTimeout(() => ticking = false, 16);
         }
+    }
+
+    // Update scroll height on resize
+    function handleResize() {
+        scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+    updateScrollProgress();
+}
+
+// Testimonials Carousel with Mobile Support
+function initTestimonialsCarousel() {
+    const scrollContainer = document.querySelector('.carousel-scroll');
+    const testimonials = document.querySelectorAll('.testimonial');
+    
+    if (!scrollContainer) return;
+
+    // Desktop hover pause
+    scrollContainer.addEventListener('mouseenter', () => {
+        scrollContainer.style.animationPlayState = 'paused';
     });
-    track.addEventListener('touchend', () => { isDown = false; startAuto(); });
 
-    // Pause on hover
-    carousel.addEventListener('mouseenter', stopAuto);
-    carousel.addEventListener('mouseleave', startAuto);
+    scrollContainer.addEventListener('mouseleave', () => {
+        scrollContainer.style.animationPlayState = 'running';
+    });
 
-    window.addEventListener('resize', () => { size(); goTo(current); });
-    size();
-    goTo(0);
-    startAuto();
+    // Mobile touch interactions
+    testimonials.forEach(testimonial => {
+        let touchStartTime = 0;
+        
+        testimonial.addEventListener('touchstart', (e) => {
+            touchStartTime = Date.now();
+            scrollContainer.style.animationPlayState = 'paused';
+            testimonial.classList.add('mobile-active');
+        }, { passive: true });
+
+        testimonial.addEventListener('touchend', (e) => {
+            const touchDuration = Date.now() - touchStartTime;
+            
+            // If quick tap (less than 200ms), keep effect for 1 second
+            if (touchDuration < 200) {
+                setTimeout(() => {
+                    testimonial.classList.remove('mobile-active');
+                    scrollContainer.style.animationPlayState = 'running';
+                }, 1000);
+            } else {
+                // If longer touch, remove immediately
+                testimonial.classList.remove('mobile-active');
+                setTimeout(() => {
+                    scrollContainer.style.animationPlayState = 'running';
+                }, 300);
+            }
+        }, { passive: true });
+
+        testimonial.addEventListener('touchcancel', () => {
+            testimonial.classList.remove('mobile-active');
+            scrollContainer.style.animationPlayState = 'running';
+        }, { passive: true });
+    });
 }
 
 // Smart sticky CTA visibility based on sections with existing CTAs
